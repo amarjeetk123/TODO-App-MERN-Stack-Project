@@ -32,6 +32,27 @@ exports.add_todo = async (req, res) => {
     }
 };
 
+// get all the TODOs
+exports.getTodos = async (req,res) =>{
+
+    try {
+        const users = await User.find()
+        res.status(200).json({
+            success:true,
+            users,
+        })
+        
+    } catch (error) {
+        console.log(error)
+        res.status(400).json({
+            success : false,
+            message : error.message,
+        })
+        
+    }
+
+}
+
 //function for EDIT the todo
 
 exports.edit_todo = async (req, res) => {

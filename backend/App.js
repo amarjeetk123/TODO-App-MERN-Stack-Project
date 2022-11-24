@@ -14,4 +14,6 @@ connectToDB();
 
 app.use("/" ,userRoutes )
 
+// query@ineuron.ai 
+
 module.exports = app ;
