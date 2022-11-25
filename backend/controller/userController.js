@@ -15,14 +15,16 @@ exports.add_todo = async (req, res) => {
             res.status(401).send("title is required");
         }
 
-        // inserting user data inti database
-        const user_data = await User.create({ title, message });
+        // inserting user data inside database
+        else{
+            const user_data = await User.create({ title, message });
 
         res.status(201).json({
             succsess: true,
             message: "TODO created succesfully",
             user_data,
         });
+        }
     } catch (error) {
         console.log(error.message);
         res.status(201).json({
