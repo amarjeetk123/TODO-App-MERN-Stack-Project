@@ -1,15 +1,28 @@
 
 import './App.css';
-import Form from "./component/Form"
-import Todos from './component/List';
+
+import Homepage from './component/Homepage';
+import {BrowserRouter , Route , Routes} from "react-router-dom"
+
+import Login from './component/Login';
+import Signup from './component/Signup';
 
 function App() {
   return (
-    <div className="App">
-      <Form />
-      <Todos />
+    // <div className="App">
+    //   <Navbar />
+    //   <Form />
+    //   <Todos />
       
-    </div>
+    // </div>
+    <BrowserRouter>
+    <Routes>
+      <Route path='/' element = { <Signup /> } />
+      <Route path='/login' element = { <Login /> } />
+      <Route path='/home' element = { <Homepage /> } />
+      
+    </Routes>
+    </BrowserRouter>
   );
 }
 

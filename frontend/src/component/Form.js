@@ -31,21 +31,21 @@ const Form = () => {
 
   }
   return (
-    <>
-      <form onSubmit={handleSubmit}>
-        <div className="w-[70%] h-[60vh] pl-8 flex justify-center items-center ">
+    < div >
+      <form onSubmit={handleSubmit} className="  flex justify-center items-center mb-8 mt-24">
+        <div className=" w-[70%] bg-indigo-100  flex justify-center items-center ">
           <div className=" w-[100%] border px-6 py-4 border-indigo-200">
             <div className="text-center text-[30px] font-bold">
-              <h2 className="text-indigo-800">TODO APP</h2>
+              <h2 className="text-indigo-800">Create TODO</h2>
             </div>
             <div className="flex flex-col justify-between sm:flex-row gap-6 mt-4">
               <div className="flex flex-col  ">
-                <label className="text-[20px] font-mono">Title</label>
+                <label placeholder="Add Title" className="text-[20px] font-mono">Title</label>
                 <input value={userTitle} onChange={(event) => setTitle(event.target.value) }  className="bg-gray-100 bg-opacity-60 rounded border border-gray-300 focus:border-indigo-400 py-1 px-3 text-gray-700 text-lg focus:bg-white focus:ring-2 outline-none transition-colors duration-200 ease-in-out " />
               </div>
               <div className="flex flex-col w-[45%] ">
                 <label className="text-[20px] font-mono">Message</label>
-                <textarea value={userMessage} onChange={(event) => setMessage(event.target.value) } className="bg-gray-100 bg-opacity-60 rounded border border-gray-300 focus:border-indigo-400 py-1 px-3 text-gray-700 text-lg focus:bg-white focus:ring-2 outline-none transition-colors duration-200 ease-in-out " />
+                <textarea placeholder="Add a Task" value={userMessage} onChange={(event) => setMessage(event.target.value) } className="bg-gray-100 bg-opacity-60 rounded border border-gray-300 focus:border-indigo-400 py-1 px-3 text-gray-700 text-lg focus:bg-white focus:ring-2 outline-none transition-colors duration-200 ease-in-out " />
               </div>
               <div className="p-2 ">
                 <button
@@ -59,7 +59,7 @@ const Form = () => {
           </div>
         </div>
       </form>
-    </>
+    </div>
   );
 };
 export default Form;
