@@ -1,0 +1,21 @@
+.div{
+    position: relative;
+}
+.or::before{
+    content: '';
+    position: absolute;
+    width: 46%;
+    height: 2px;
+    background-color: rgb(105, 96, 96);
+    left: 0;
+    top: 13%;
+}
+.or::after{
+    content: '';
+    position: absolute;
+    width: 46%;
+    height: 2px;
+    background-color: rgb(105, 96, 96);
+    top: 13%;
+    
+}

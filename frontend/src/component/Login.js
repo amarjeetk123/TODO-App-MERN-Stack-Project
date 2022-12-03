@@ -1,6 +1,11 @@
 import React,{useState} from 'react'
 import {account} from "../appwrite/appwriteConfig"
 import {useNavigate} from "react-router-dom"
+import Sociallogin from './Sociallogin';
+
+// this is my react-toastify
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 
 
@@ -12,17 +17,48 @@ function Login() {
     password:""
   })
 
+
+
   const userLogin = async (e) =>{
     e.preventDefault()
     try {
 
       await account.createEmailSession(user.email , user.password)
+
+      
       navigate("/home")
       
     } catch (error) {
       console.log(error)
-      alert("Please Check Email and Password")
+
+      if(user.email=="" && user.password==""){
+        return toast( "Please Write Email and Password" , {
+          autoClose: 2200,
+          type : "error",
+          position:"top-center",
+    
+        })
+      }
+      
+      if(user.email==""){
+        return toast( "Please Fill the Email" , {
+          autoClose: 2200,
+          type : "error",
+          position:"top-center",
+    
+        })
+      }
+      if(user.password==""){
+        return toast( "Please Write the password" , {
+          autoClose: 2200,
+          type : "error",
+          position:"top-center",
+    
+        })
+      }
+     
     }
+    
   }
 
   
@@ -59,9 +95,10 @@ function Login() {
                 }}  />
             </div>
             <button onClick={userLogin} className='bg-indigo-600 rounded-[4px] hover:bg-indigo-700  text-white py-1 w-[100%] my-4 ' >Submit</button>
-
+ <Sociallogin />
         </div>
         <h1  className='text-white mt-2' >Not have an account ? <a className='text-black' href='/' >Sign Up here</a> </h1>
+        <ToastContainer  closeOnClick = "true" pauseOnHover ="true" />
     </div>
   )
 }

@@ -6,7 +6,9 @@ const userSchema = new mongoose.Schema({
         require : [true , "title is required"],
     },
     message:{
-        type : String
+        type : [{
+            type: String,
+        }]
     }
 })
 

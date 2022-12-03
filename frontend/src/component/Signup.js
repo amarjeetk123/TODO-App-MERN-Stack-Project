@@ -3,6 +3,14 @@ import {account} from "../appwrite/appwriteConfig"
 import {useNavigate} from "react-router-dom"
 import { v4 as uuidv4 } from "uuid"
 
+import Sociallogin from './Sociallogin'
+
+import "./style.css"
+
+// this is my react-toastify
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 
 function Signup() {
 
@@ -31,11 +39,16 @@ function Signup() {
         function(responce){
             // console.log(responce);
             navigate("/login") // success
+
+           
+
         },
         function(error){
             console.log(error)  // failure
         }
     )
+
+   
 
  }
 //  useEffect(() => {
@@ -47,11 +60,11 @@ function Signup() {
 
     return (
         <div  className='bg-indigo-500 h-[100vh] flex flex-col items-center justify-center'>
-            <div className=' rounded-[7px] bg-white px-8 py-4 '>
+            <div className=' rounded-[7px] bg-white px-6 py-4 '>
                 <h1 className='text-center text-[35px] ' >Sign UP</h1>
                 <div  className='' >
                     <h2>Name:</h2>
-                    <input className='bg-gray-100 rounded-[5px] outline-none pl-2  border-2 border-indigo-200 text-[20px] focus:bg-white focus:border-indigo-500 ' type={"text"}
+                    <input className=' w-[100%] bg-gray-100 rounded-[5px] outline-none pl-2  border-2 border-indigo-200 text-[20px] focus:bg-white focus:border-indigo-500 ' type={"text"}
                     onChange={ (e) => {
                         setUser({
                             ...user,
@@ -62,7 +75,7 @@ function Signup() {
                 </div>
                 <div className='my-2'>
                     <h2>Email:</h2>
-                    <input className='bg-gray-100 rounded-[5px] outline-none pl-2 border-2 border-indigo-200 text-[20px] focus:bg-white focus:border-indigo-500 ' type={"email"}
+                    <input className=' w-[100%] bg-gray-100 rounded-[5px] outline-none pl-2 border-2 border-indigo-200 text-[20px] focus:bg-white focus:border-indigo-500 ' type={"email"}
                     onChange={ (e) => {
                         setUser({
                             ...user,
@@ -72,7 +85,7 @@ function Signup() {
                 </div>
                 <div>
                     <h2>Password:</h2>
-                    <input className='bg-gray-100 rounded-[5px] outline-none pl-2 border-2 border-indigo-200 text-[20px] focus:bg-white focus:border-indigo-500 '  type={"password"} 
+                    <input className=' w-[100%] bg-gray-100 rounded-[5px] outline-none pl-2 border-2 border-indigo-200 text-[20px] focus:bg-white focus:border-indigo-500 '  type={"password"} 
                     onChange={ (e) => {
                         setUser({
                             ...user,
@@ -82,9 +95,16 @@ function Signup() {
                 </div>
                 <button className='bg-indigo-600 rounded-[4px] hover:bg-indigo-700  text-white py-1 w-[100%] my-4 '
                 onClick={signupUser} >Submit</button>
-    
+
+              <Sociallogin  />
             </div>
-            <h1  className='text-white mt-2' >Already have an account ? <a className='text-black  ' href='./login' >Login here</a> </h1>
+            
+          
+            
+            
+            
+        <h1  className='text-white mt-2' >Already have an account ? <a className='text-black  ' href='./login' >Login here</a> </h1>
+            <ToastContainer position="bottom-right" closeOnClick = "true" pauseOnHover ="true" />
         </div>
       )
 }

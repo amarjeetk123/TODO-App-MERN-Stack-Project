@@ -2,6 +2,10 @@ import React from "react";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
+// this is my react-toastify
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 const Todos = () => {
     const [userTodo, setUserTodo] = useState(""); // null or empty string "" both are same , this is default value
 
@@ -24,23 +28,39 @@ const Todos = () => {
         const userchoice = window.confirm("Are You Sure to edit this title ?")
         if (userchoice) {
             const new_title = prompt("Please enter a new title for your todos")
-
-            if (!new_title) {
-                alert("please neter the title name")
-            }
-            else {
+            if(new_title){
                 const result = await axios.put(`/edit/${user._id}`, {
                     title: new_title,
                 })
+                return toast( "Todo Title Edited Successfully" , {
+                    autoClose: 1300,
+                    type : "success"
+            
+                  })
             }
-        }
+            else if(!new_title){
+                return toast( "Todo Title is not Edited" , {
+                    autoClose: 1300,
+                    type : "error"
+            
+                  })
+            }
 
+
+        }
     }
+
     const handledelete = async (user) => {
         let userChoic = window.confirm("Are You Sure ?")
         if (userChoic) {
             const delete_ = await axios.delete(`/delete/${user._id}`)
         }
+
+        return toast("Todo Deleted Successfully", {
+            autoClose: 1300,
+            type: "success"
+
+        })
     }
 
     return (
@@ -51,10 +71,10 @@ const Todos = () => {
                 </div>
                 <div className="bg-indigo-100  px-4 py-4 w-full ">
                     {userTodo &&
-                        userTodo.map((user , id) => (
+                        userTodo.map((user, id) => (
                             <div key={id} className=" mb-3 flex justify-center items-center gap-4">
                                 <div className="w-4 h-4 border border-blue-800 flex justify-center items-center p-4">
-                                    <h1 className="text-[18px]">1</h1>
+                                    <h1 className="text-[18px]"> {id + 1} </h1>
                                 </div>
 
                                 <div className="w-[70%] h-9 cursor-pointer hover:bg-indigo-300 p-2 bg-gray-100">
@@ -73,6 +93,7 @@ const Todos = () => {
                         ))}
                 </div>
             </div>
+            <ToastContainer position="top-center" closeOnClick="true" pauseOnHover="true" />
         </div>
     );
 };
