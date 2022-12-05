@@ -9,12 +9,7 @@ import Signup from './component/Signup';
 
 function App() {
   return (
-    // <div className="App">
-    //   <Navbar />
-    //   <Form />
-    //   <Todos />
-      
-    // </div>
+  
     <BrowserRouter>
     <Routes>
       <Route path='/' element = { <Signup /> } />

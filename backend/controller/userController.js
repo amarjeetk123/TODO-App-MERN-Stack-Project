@@ -95,3 +95,127 @@ exports.delete_todo = async (req, res) => {
 
 }
 
+// FUNCTION FOR SEARCH ANy TODO
+/**
+ * searchTodos() - Asynchronous Function
+ *      - Destructures the input received in req.query.
+ *      - Validated if userId/appwriteId is received.
+ *      - Validated if userId/appwriteId received is of type string. 
+ *      - Validated if search is received.
+ *      - Validated if search received is of type string.
+ *      - Fetch the user using userId/appwriteId - (Asynchronous operation - find())
+ *      - Validate if user exists in DB
+ *      - Finds the todos and tasks which include the search value using regex and $or operation.
+ *      - Validate if todos and tasks returned falsy values.
+ *      - Only filter the todos whose user reference matches with the user we fetched
+ */
+ exports.searchTodos = async (req, res) => {
+    try{
+
+        const { search } = req.body
+
+        // if(!userId){
+        //     throw new Error("User Id value  is required to fetch the todos")
+        // }
+
+
+        if(!search){
+            throw new Error("Search value  is required to fetch the todos")
+        }
+        
+        // const user = await User.find({appwriteId: userId});
+
+        // if(!user){
+        //     throw new Error("User not found in DB")
+        // }
+
+        const unfilteredTodos = await User.find({ $or: [{title: new RegExp(search, 'i')} ] })
+        
+        if(!unfilteredTodos){
+            throw new Error("Searched todo or tasks retured falsy values")
+        }
+        
+        // const todos = unfilteredTodos.filter((todo)=>todo.user.equals(user[0]._id))
+        res.status(200).json({
+            success: true,
+            unfilteredTodos
+        })
+    } catch(error){
+        console.log("Error in search todo controller")
+        console.log( error)
+        res.status(401).json({
+            success: false,
+            error
+        })
+    }
+}
+
+
+
+
+
+/**
+ * deleteTodo() - Asynchronous Function
+ *      - Destructures the input received in req.params.
+ *      - Validated if userId/appwriteId is received.
+ *      - Validated if userId/appwriteId received is of type string. 
+ *      - Validated if todoId is received.
+ *      - Validated if todoId received is of type string.
+ *      - Fetch the todo using todoID - (Asynchronous operation - findByIDAndDelete())
+ *      - Fetch the user using userId/appwriteId - (Asynchronous operation - find())
+ *      - Validate todo exists 
+ *      - Validate user exists
+ *      - Filter the user todos collection. Filter all the todos which was not deleted and store it to user todos
+ *      - Save the user (Asynchronous operation - save())
+ */
+//  exports.deleteTodo = async (req, res) => {
+//     try{
+//         const { userId, todoId } = req.params
+
+//         if(!userId){
+//             throw new Error("User ID is required to delete the todo")
+//         }
+
+//         if(typeof userId !== "string"){
+//             throw new Error("User Id should of type string")
+//         }
+
+//         if(!todoId){
+//             throw new Error("Todo ID is required to fetch the todo")
+//         }
+
+//         if(typeof todoId !== "string"){
+//             throw new Error("Todo Id should of type string")
+//         }
+
+//         const todo = await Todo.findByIdAndDelete(todoId)
+
+//         const user = await User.find({appwriteId: userId})
+
+//         if(!todo){
+//             throw new Error("Todo not found in DB")
+//         }
+
+//         if(!user[0]){
+//             throw new Error("User not found in DB")
+//         }
+
+//         user[0].todos = user[0].todos.filter((todoObj)=>(todoObj.equals(todo._id)===false))
+
+//         await user[0].save()
+
+//         res.status(200).json({
+//             success: true,
+//             message: "Todo deleted successfully",
+//             deleteTodo: todo
+//         })
+//     } catch(error){
+//         console.log("Error in delete todo controller")
+//         console.log("ERROR: ", error)
+//         res.status(400).json({
+//             success: false,
+//             messageSrc: "Error in delete todo controller",
+//             error
+//         })
+//     }
+// }

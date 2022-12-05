@@ -1,15 +1,20 @@
 const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
-    title:{
+    title: {
         type: String,
-        require : [true , "title is required"],
+        require: [true, "title is required"],
+        trim: true,
+        maxlength: [15, "Titlt must be less than 15 character"]
     },
-    message:{
-        type : [{
-            type: String,
-        }]
+    message: [{
+        type: String,
+        createdAt: { type: Date, default: Date.now() },
+        updateAt: { type: Date, default: Date.now() },
     }
-})
+    ]
+},
+    { timestamps: true }
+)
 
-module.exports = mongoose.model("User" , userSchema);
+module.exports = mongoose.model("User", userSchema);
