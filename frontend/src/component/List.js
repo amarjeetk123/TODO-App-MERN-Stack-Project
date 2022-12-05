@@ -7,28 +7,20 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const Todos = () => {
-    const [userTodo, setUserTodo] = useState(""); // null or empty string "" both are same , this is default value
+    const [userTodo, setUserTodo] = useState([]); // null or empty string "" both are same , this is default value
     const [messageShow, SetMessageShow] = useState("false")
+
+    const [userTodosea, setUserTodosea] = useState([]);
+
+    const [isSearch , setIsSearch]  = useState(false)
 
     /**
      * To store the search string.
      */
-     const [search, setSearch] = useState("")
+    const [search, setSearch] = useState("")
 
-     const handleSearch = async (e) => {
-        try{
-            e.preventDefault()
-            setSearch(search.trim())
-            if(!search) return
-            // console.log(search)
-            let result__ = await axios.get(`/search/${search}`)  
-            console.log(result__)
-        }catch(error){
-            console.log("Error while fetching search todos in getTodos method")
-            console.log("Error: ", error)
-        }     
-    }
-   
+
+
 
     const fetchUserData = async () => {
         const respo = await axios.get("/list");
@@ -36,13 +28,17 @@ const Todos = () => {
         // if no users is there plesae no set the value of setUserData
         if (respo.data.users.length > 0) {
             setUserTodo(respo.data.users);
+            // console.log(respo.data.users)
         }
     };
     // console.log(userTodo);
     // here we can put all the code of fetchUserData function inside useEffect insted of  calling that funvtion but the problem is,  it is a bad practice to put asynch await inside useEffect
-    
+
     useEffect(() => {
         fetchUserData();
+        if(search==""){
+            setIsSearch(false)
+        }
     }, [userTodo]);
 
     const handleEdit = async (user) => {
@@ -96,6 +92,31 @@ const Todos = () => {
         // })
     }
 
+    const handleSearch = async (e) => {
+        try {
+            e.preventDefault()
+            setSearch(search.trim())
+            setIsSearch(true)
+         
+            if (!search) return
+            // console.log(search)
+
+            let result__ = await axios.get("/search", { params: { search } })
+            console.log(result__)
+            if (result__.data.unfilteredTodos.length > 0) {
+                setUserTodosea(result__.data.unfilteredTodos)
+
+
+            }
+            console.log(userTodosea)
+        } catch (error) {
+            console.log("Error while fetching search todos in getTodos method")
+            console.log("Error: ", error)
+        }
+    }
+
+   
+
     return (
         <div className="flex justify-center items-center mb-8">
             <div className="w-[70%] ">
@@ -104,50 +125,101 @@ const Todos = () => {
 
                 </div>
                 <div className="flex justify-end mb-4 py-2">
-                    <input value={search} onChange={ (e) => setSearch(e.target.value) } 
-                     onKeyDown={(e)=>{
-                        if(e.key === "Enter") handleSearch(e)
-                    }}
-                     placeholder="Search for a title....." className=" text-[20px]  border-[2px] border-indigo-400 rounded-[6px] w-[30%] h-[40px] pl-3 outline-none focus:border-[3px] focus:border-indigo-500 bg-gray-100 focus:bg-white " type={"text"} />
-                    <i   onClick={(e)=>{
+                    <input value={search} onChange={(e) => setSearch(e.target.value)}
+                        onKeyDown={(e) => {
+                            if (e.key === "Enter") handleSearch(e)
+                        }}
+                        placeholder="Search for a title....." className=" text-[20px]  border-[2px] border-indigo-400 rounded-[6px] w-[30%] h-[40px] pl-3 outline-none focus:border-[3px] focus:border-indigo-500 bg-gray-100 focus:bg-white " type={"text"} />
+                    <i onClick={(e) => {
                         handleSearch(e)
                     }}
-                    className="fa-solid fa-magnifying-glass  fa-2x  absolute mr-2 mt-1 text-indigo-500 cursor-pointer  "></i>
+                        className="fa-solid fa-magnifying-glass  fa-2x  absolute mr-2 mt-1 text-indigo-500 cursor-pointer  "></i>
                 </div>
 
 
                 <div className="bg-indigo-100  px-4 py-4 w-full ">
-                    {userTodo &&
-                        userTodo.map((user, id) => (
-                            <div key={id} className=" mb-3 flex justify-center items-center gap-4">
-                                <div className="w-4 h-4 border border-blue-800 flex justify-center items-center p-4">
-                                    <h1 className="text-[18px]"> {id + 1} </h1>
-                                </div>
 
-                                <div className="w-[100%]" >
-                                    <div className="w-[100%] h-9 cursor-pointer hover:bg-indigo-300 p-2 bg-gray-100">
-                                        <h1 className="text-[18px]" onClick={() => SetMessageShow(!messageShow)}  >{user.title}</h1>
 
+
+                    {
+
+                        isSearch ?     
+                      
+                        userTodosea.map((user, id) => (
+                                <div key={id} className=" mb-3 flex justify-center items-center gap-4">
+                                    <div className="w-4 h-4 border border-blue-800 flex justify-center items-center p-4">
+                                        <h1 className="text-[18px]"> {id + 1} </h1>
                                     </div>
-
-                                    <div className=" " >
-                                        {messageShow && <h1 className="text-[20px]  border-[2px] border-indigo-400  flex   justify-between p-2 " >   {user.message} <div onClick={() => handledeleteMessage(user.message)} className="cursor-pointer text-red-400 " >
-                                            <i className="fa-solid fa-trash-can "  ></i>
-                                        </div>  </h1>}
-                                        
+    
+                                    <div className="w-[100%]" >
+                                        <div className="w-[100%] h-9 cursor-pointer hover:bg-indigo-300 p-2 bg-gray-100">
+                                            <h1 className="text-[18px]" onClick={() => SetMessageShow(!messageShow)}  >{user.title}</h1>
+    
+                                        </div>
+    
+                                        <div className=" " >
+                                            {messageShow && <h1 className="text-[20px]  border-[2px] border-indigo-400  flex   justify-between p-2 " >   {user.message} <div onClick={() => handledeleteMessage(user.message)} className="cursor-pointer text-red-400 " >
+                                                <i className="fa-solid fa-trash-can "  ></i>
+                                            </div>  </h1>}
+    
+                                        </div>
+                                    </div>
+    
+                                    {/* code for edit button  */}
+                                    <div onClick={() => handleEdit(user)} className="cursor-pointer  text-indigo-500 opacity-0.7" >
+                                        <i className="fa-regular fa-pen-to-square fa-2x"   ></i>
+                                    </div>
+                                    {/* code for delete button  */}
+                                    <div onClick={() => handledelete(user)} className="cursor-pointer text-red-400 " >
+                                        <i className="fa-solid fa-trash-can fa-2x"  ></i>
                                     </div>
                                 </div>
+                            ))
+                      
 
-                                {/* code for edit button  */}
-                                <div onClick={() => handleEdit(user)} className="cursor-pointer  text-indigo-500 opacity-0.7" >
-                                    <i className="fa-regular fa-pen-to-square fa-2x"   ></i>
+
+                        : 
+
+                        
+                            userTodo.map((user, id) => (
+                                <div key={id} className=" mb-3 flex justify-center items-center gap-4">
+                                    <div className="w-4 h-4 border border-blue-800 flex justify-center items-center p-4">
+                                        <h1 className="text-[18px]"> {id + 1} </h1>
+                                    </div>
+    
+                                    <div className="w-[100%]" >
+                                        <div className="w-[100%] h-9 cursor-pointer hover:bg-indigo-300 p-2 bg-gray-100">
+                                            <h1 className="text-[18px]" onClick={() => SetMessageShow(!messageShow)}  >{user.title}</h1>
+    
+                                        </div>
+    
+                                        <div className=" " >
+                                            {messageShow && <h1 className="text-[20px]  border-[2px] border-indigo-400  flex   justify-between p-2 " >   {user.message} <div onClick={() => handledeleteMessage(user.message)} className="cursor-pointer text-red-400 " >
+                                                <i className="fa-solid fa-trash-can "  ></i>
+                                            </div>  </h1>}
+    
+                                        </div>
+                                    </div>
+    
+                                    {/* code for edit button  */}
+                                    <div onClick={() => handleEdit(user)} className="cursor-pointer  text-indigo-500 opacity-0.7" >
+                                        <i className="fa-regular fa-pen-to-square fa-2x"   ></i>
+                                    </div>
+                                    {/* code for delete button  */}
+                                    <div onClick={() => handledelete(user)} className="cursor-pointer text-red-400 " >
+                                        <i className="fa-solid fa-trash-can fa-2x"  ></i>
+                                    </div>
                                 </div>
-                                {/* code for delete button  */}
-                                <div onClick={() => handledelete(user)} className="cursor-pointer text-red-400 " >
-                                    <i className="fa-solid fa-trash-can fa-2x"  ></i>
-                                </div>
-                            </div>
-                        ))}
+                            ))
+                 
+
+
+                    }
+
+
+
+
+                    
                 </div>
             </div>
             <ToastContainer position="top-center" closeOnClick="true" pauseOnHover="true" />

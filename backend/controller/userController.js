@@ -112,7 +112,7 @@ exports.delete_todo = async (req, res) => {
  exports.searchTodos = async (req, res) => {
     try{
 
-        const { search } = req.body
+        const { search } = req.query
 
         // if(!userId){
         //     throw new Error("User Id value  is required to fetch the todos")
