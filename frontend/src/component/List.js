@@ -12,7 +12,7 @@ const Todos = () => {
 
     const [userTodosea, setUserTodosea] = useState([]);
 
-    const [isSearch , setIsSearch]  = useState(false)
+    const [isSearch, setIsSearch] = useState(false)
 
     /**
      * To store the search string.
@@ -36,7 +36,7 @@ const Todos = () => {
 
     useEffect(() => {
         fetchUserData();
-        if(search==""){
+        if (search == "") {
             setIsSearch(false)
         }
     }, [userTodo]);
@@ -92,21 +92,27 @@ const Todos = () => {
         // })
     }
 
+
+    const [noSearchValue, SetNoSearchValue] = useState(true)
+
+
     const handleSearch = async (e) => {
         try {
             e.preventDefault()
             setSearch(search.trim())
             setIsSearch(true)
-         
+
             if (!search) return
             // console.log(search)
 
             let result__ = await axios.get("/search", { params: { search } })
-            console.log(result__)
+            // console.log(result__)
+            if (!result__) {
+                SetNoSearchValue(false)
+            }
+
             if (result__.data.unfilteredTodos.length > 0) {
                 setUserTodosea(result__.data.unfilteredTodos)
-
-
             }
             console.log(userTodosea)
         } catch (error) {
@@ -115,7 +121,7 @@ const Todos = () => {
         }
     }
 
-   
+
 
     return (
         <div className="flex justify-center items-center mb-8">
@@ -138,88 +144,88 @@ const Todos = () => {
 
 
                 <div className="bg-indigo-100  px-4 py-4 w-full ">
-
-
-
                     {
+                        isSearch ?
 
-                        isSearch ?     
-                      
-                        userTodosea.map((user, id) => (
-                                <div key={id} className=" mb-3 flex justify-center items-center gap-4">
-                                    <div className="w-4 h-4 border border-blue-800 flex justify-center items-center p-4">
-                                        <h1 className="text-[18px]"> {id + 1} </h1>
-                                    </div>
-    
-                                    <div className="w-[100%]" >
-                                        <div className="w-[100%] h-9 cursor-pointer hover:bg-indigo-300 p-2 bg-gray-100">
-                                            <h1 className="text-[18px]" onClick={() => SetMessageShow(!messageShow)}  >{user.title}</h1>
-    
+                            noSearchValue || !isSearch ?
+                            <p className="text-sm md:text-2xl font-semibold text-violet-800 text-center p-2">No todos title available with respect to your search</p>
+                                :
+                                userTodosea.map((user, id) => (
+                                    <div key={id} className=" mb-3 flex justify-center items-center gap-4">
+                                        <div className="w-4 h-4 border border-blue-800 flex justify-center items-center p-4">
+                                            <h1 className="text-[18px]"> {id + 1} </h1>
                                         </div>
-    
-                                        <div className=" " >
-                                            {messageShow && <h1 className="text-[20px]  border-[2px] border-indigo-400  flex   justify-between p-2 " >   {user.message} <div onClick={() => handledeleteMessage(user.message)} className="cursor-pointer text-red-400 " >
-                                                <i className="fa-solid fa-trash-can "  ></i>
-                                            </div>  </h1>}
-    
+
+                                        <div className="w-[100%]" >
+                                            <div className="w-[100%] h-9 cursor-pointer hover:bg-indigo-300 p-2 bg-gray-100">
+                                                <h1 className="text-[18px]" onClick={() => SetMessageShow(!messageShow)}  >{user.title}</h1>
+
+                                            </div>
+
+                                            <div className=" " >
+                                                {messageShow && <h1 className="text-[20px]  border-[2px] border-indigo-400  flex   justify-between p-2 " >   {user.message} <div onClick={() => handledeleteMessage(user.message)} className="cursor-pointer text-red-400 " >
+                                                    <i className="fa-solid fa-trash-can "  ></i>
+                                                </div>  </h1>}
+
+                                            </div>
                                         </div>
-                                    </div>
-    
-                                    {/* code for edit button  */}
-                                    <div onClick={() => handleEdit(user)} className="cursor-pointer  text-indigo-500 opacity-0.7" >
-                                        <i className="fa-regular fa-pen-to-square fa-2x"   ></i>
-                                    </div>
-                                    {/* code for delete button  */}
-                                    <div onClick={() => handledelete(user)} className="cursor-pointer text-red-400 " >
-                                        <i className="fa-solid fa-trash-can fa-2x"  ></i>
-                                    </div>
-                                </div>
-                            ))
-                      
 
-
-                        : 
-
-                        
-                            userTodo.map((user, id) => (
-                                <div key={id} className=" mb-3 flex justify-center items-center gap-4">
-                                    <div className="w-4 h-4 border border-blue-800 flex justify-center items-center p-4">
-                                        <h1 className="text-[18px]"> {id + 1} </h1>
-                                    </div>
-    
-                                    <div className="w-[100%]" >
-                                        <div className="w-[100%] h-9 cursor-pointer hover:bg-indigo-300 p-2 bg-gray-100">
-                                            <h1 className="text-[18px]" onClick={() => SetMessageShow(!messageShow)}  >{user.title}</h1>
-    
+                                        {/* code for edit button  */}
+                                        <div onClick={() => handleEdit(user)} className="cursor-pointer  text-indigo-500 opacity-0.7" >
+                                            <i className="fa-regular fa-pen-to-square fa-2x"   ></i>
                                         </div>
-    
-                                        <div className=" " >
-                                            {messageShow && <h1 className="text-[20px]  border-[2px] border-indigo-400  flex   justify-between p-2 " >   {user.message} <div onClick={() => handledeleteMessage(user.message)} className="cursor-pointer text-red-400 " >
-                                                <i className="fa-solid fa-trash-can "  ></i>
-                                            </div>  </h1>}
-    
+                                        {/* code for delete button  */}
+                                        <div onClick={() => handledelete(user)} className="cursor-pointer text-red-400 " >
+                                            <i className="fa-solid fa-trash-can fa-2x"  ></i>
                                         </div>
                                     </div>
-    
-                                    {/* code for edit button  */}
-                                    <div onClick={() => handleEdit(user)} className="cursor-pointer  text-indigo-500 opacity-0.7" >
-                                        <i className="fa-regular fa-pen-to-square fa-2x"   ></i>
-                                    </div>
-                                    {/* code for delete button  */}
-                                    <div onClick={() => handledelete(user)} className="cursor-pointer text-red-400 " >
-                                        <i className="fa-solid fa-trash-can fa-2x"  ></i>
-                                    </div>
-                                </div>
-                            ))
-                 
+                                ))
+
+                            :
+
+                            (userTodo.length === 0) ?
 
 
+                                <p className="text-2xl font-semibold text-violet-800 text-center p-2">Your have no todos left...!</p>
+
+                                :
+
+                                userTodo.map((user, id) => (
+                                    <div key={id} className=" mb-3 flex justify-center items-center gap-4">
+                                        <div className="w-4 h-4 border border-blue-800 flex justify-center items-center p-4">
+                                            <h1 className="text-[18px]"> {id + 1} </h1>
+                                        </div>
+
+                                        <div className="w-[100%]" >
+                                            <div className="w-[100%] h-9 cursor-pointer hover:bg-indigo-300 p-2 bg-gray-100">
+                                                <h1 className="text-[18px]" onClick={() => SetMessageShow(!messageShow)}  >{user.title}</h1>
+
+                                            </div>
+
+                                            <div  >
+                                                {messageShow && <h1 className="text-[20px]  border-[2px] border-indigo-400  flex   justify-between p-2 " >   {user.message}
+                                                    <div onClick={() => handledeleteMessage(user.message)} className="cursor-pointer text-red-400 " >
+                                                        <i className="fa-solid fa-trash-can "  ></i>
+                                                    </div>
+                                                </h1>
+                                                }
+
+
+                                            </div>
+                                        </div>
+
+                                        {/* code for edit button  */}
+                                        <div onClick={() => handleEdit(user)} className="cursor-pointer  text-indigo-500 opacity-0.7" >
+                                            <i className="fa-regular fa-pen-to-square fa-2x"   ></i>
+                                        </div>
+                                        {/* code for delete button  */}
+                                        <div onClick={() => handledelete(user)} className="cursor-pointer text-red-400 " >
+                                            <i className="fa-solid fa-trash-can fa-2x"  ></i>
+                                        </div>
+                                    </div>
+                                ))
                     }
 
-
-
-
-                    
                 </div>
             </div>
             <ToastContainer position="top-center" closeOnClick="true" pauseOnHover="true" />
