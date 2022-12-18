@@ -8,22 +8,25 @@ exports.home = (req, res) => {
 exports.add_todo = async (req, res) => {
     try {
         // collect the details
-        const { title, message } = req.body;
+        const { title, message, userId } = req.body;
 
         // check title is present or not
         if (!title) {
             res.status(401).send("title is required");
         }
+        if (!userId) {
+            return res.status(401).send("User Id is required to fetch the todos")
+        }
 
         // inserting user data inside database
-        else{
-            const user_data = await User.create({ title, message });
+        else {
+            const user_data = await User.create({ title, message , userId });
 
-        res.status(201).json({
-            succsess: true,
-            message: "TODO created succesfully",
-            user_data,
-        });
+            res.status(201).json({
+                succsess: true,
+                message: "TODO created succesfully",
+                user_data,
+            });
         }
     } catch (error) {
         console.log(error.message);
@@ -35,22 +38,22 @@ exports.add_todo = async (req, res) => {
 };
 
 // get all the TODOs
-exports.getTodos = async (req,res) =>{
+exports.getTodos = async (req, res) => {
 
     try {
         const users = await User.find()
         res.status(200).json({
-            success:true,
+            success: true,
             users,
         })
-        
+
     } catch (error) {
         console.log(error)
         res.status(400).json({
-            success : false,
-            message : error.message,
+            success: false,
+            message: error.message,
         })
-        
+
     }
 
 }
@@ -109,40 +112,39 @@ exports.delete_todo = async (req, res) => {
  *      - Validate if todos and tasks returned falsy values.
  *      - Only filter the todos whose user reference matches with the user we fetched
  */
- exports.searchTodos = async (req, res) => {
-    try{
+exports.searchTodos = async (req, res) => {
+    const { search } = req.query
+    const { userId } = req.body
+    if (!search) {
+        return res.status(401).send("Please give any value")
+    }
+    // if(!userId){
+    //     return res.status(401).send("User Id is required to fetch the todos")
+    // }
+    try {
 
-        const { search } = req.query
-
-        // if(!userId){
-        //     throw new Error("User Id value  is required to fetch the todos")
-        // }
-
-
-        if(!search){
-            throw new Error("Search value  is required to fetch the todos")
-        }
-        
-        // const user = await User.find({appwriteId: userId});
+        // const user = await User.find({userId});
 
         // if(!user){
         //     throw new Error("User not found in DB")
         // }
 
-        const unfilteredTodos = await User.find({ $or: [{title: new RegExp(search, 'i')} ] })
-        
-        if(!unfilteredTodos){
-            throw new Error("Searched todo or tasks retured falsy values")
+        const unfilteredTodos = await User.find({ $or: [{ title: new RegExp(search, 'i') }] })
+        console.log(unfilteredTodos)
+
+        if (unfilteredTodos == "") {
+            console.log("skskkskskksks")
+            return res.status(401).send("no value available")
         }
-        
+
         // const todos = unfilteredTodos.filter((todo)=>todo.user.equals(user[0]._id))
         res.status(200).json({
             success: true,
             unfilteredTodos
         })
-    } catch(error){
+    } catch (error) {
         console.log("Error in search todo controller")
-        console.log( error)
+        console.log(error)
         res.status(401).json({
             success: false,
             error
@@ -158,12 +160,12 @@ exports.delete_todo = async (req, res) => {
  * deleteTodo() - Asynchronous Function
  *      - Destructures the input received in req.params.
  *      - Validated if userId/appwriteId is received.
- *      - Validated if userId/appwriteId received is of type string. 
+ *      - Validated if userId/appwriteId received is of type string.
  *      - Validated if todoId is received.
  *      - Validated if todoId received is of type string.
  *      - Fetch the todo using todoID - (Asynchronous operation - findByIDAndDelete())
  *      - Fetch the user using userId/appwriteId - (Asynchronous operation - find())
- *      - Validate todo exists 
+ *      - Validate todo exists
  *      - Validate user exists
  *      - Filter the user todos collection. Filter all the todos which was not deleted and store it to user todos
  *      - Save the user (Asynchronous operation - save())

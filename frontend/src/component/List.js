@@ -6,9 +6,9 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const Todos = () => {
+const Todos = ({userId}) => {
     const [userTodo, setUserTodo] = useState([]); // null or empty string "" both are same , this is default value
-    const [messageShow, SetMessageShow] = useState("false")
+    const [messageShow, SetMessageShow] = useState(false)
 
     const [userTodosea, setUserTodosea] = useState([]);
 
@@ -21,9 +21,8 @@ const Todos = () => {
 
 
 
-
     const fetchUserData = async () => {
-        const respo = await axios.get("/list");
+        const respo = await axios.get("/list" , {userId} );
         // console.log(respo)
         // if no users is there plesae no set the value of setUserData
         if (respo.data.users.length > 0) {
@@ -34,12 +33,36 @@ const Todos = () => {
     // console.log(userTodo);
     // here we can put all the code of fetchUserData function inside useEffect insted of  calling that funvtion but the problem is,  it is a bad practice to put asynch await inside useEffect
 
-    useEffect(() => {
-        fetchUserData();
-        if (search == "") {
-            setIsSearch(false)
+    const [noSearchValue, SetNoSearchValue] = useState(false)
+    const handleSearch = async (e) => {
+        try {
+            e.preventDefault()
+           
+            setIsSearch(true)
+
+            if (!search) {
+                return;
+            }
+
+            let res = await axios.get("/search", { params: { search } })
+          
+          
+                SetNoSearchValue(false)
+           
+
+            if (res.data.unfilteredTodos.length > 0) {
+                setUserTodosea(res.data.unfilteredTodos)
+            }
+           
+        } catch (error) {
+            // console.log("Error while fetching search todos in search todos method")
+            // console.log("Error: ", error)
+         
+            if( error.response.data =="no value available"){
+                SetNoSearchValue(true)
+            }
         }
-    }, [userTodo]);
+    }
 
     const handleEdit = async (user) => {
         const userchoice = window.confirm("Are You Sure to edit this title ?")
@@ -93,33 +116,13 @@ const Todos = () => {
     }
 
 
-    const [noSearchValue, SetNoSearchValue] = useState(true)
-
-
-    const handleSearch = async (e) => {
-        try {
-            e.preventDefault()
-            setSearch(search.trim())
-            setIsSearch(true)
-
-            if (!search) return
-            // console.log(search)
-
-            let result__ = await axios.get("/search", { params: { search } })
-            // console.log(result__)
-            if (!result__) {
-                SetNoSearchValue(false)
-            }
-
-            if (result__.data.unfilteredTodos.length > 0) {
-                setUserTodosea(result__.data.unfilteredTodos)
-            }
-            console.log(userTodosea)
-        } catch (error) {
-            console.log("Error while fetching search todos in getTodos method")
-            console.log("Error: ", error)
+    useEffect(() => {
+        fetchUserData();
+      
+        if (search == "") {
+            setIsSearch(false)
         }
-    }
+    }, [userTodo]);
 
 
 
@@ -131,15 +134,16 @@ const Todos = () => {
 
                 </div>
                 <div className="flex justify-end mb-4 py-2">
-                    <input value={search} onChange={(e) => setSearch(e.target.value)}
+                    <input  onChange={(e) => setSearch(e.target.value)}
                         onKeyDown={(e) => {
                             if (e.key === "Enter") handleSearch(e)
                         }}
                         placeholder="Search for a title....." className=" text-[20px]  border-[2px] border-indigo-400 rounded-[6px] w-[30%] h-[40px] pl-3 outline-none focus:border-[3px] focus:border-indigo-500 bg-gray-100 focus:bg-white " type={"text"} />
-                    <i onClick={(e) => {
+                    <i  className="fa-solid fa-magnifying-glass  fa-2x  absolute mr-2 mt-1 text-indigo-500 cursor-pointer  "
+                      onClick={(e) => {
                         handleSearch(e)
                     }}
-                        className="fa-solid fa-magnifying-glass  fa-2x  absolute mr-2 mt-1 text-indigo-500 cursor-pointer  "></i>
+                       ></i>
                 </div>
 
 
@@ -147,8 +151,8 @@ const Todos = () => {
                     {
                         isSearch ?
 
-                            noSearchValue || !isSearch ?
-                            <p className="text-sm md:text-2xl font-semibold text-violet-800 text-center p-2">No todos title available with respect to your search</p>
+                            noSearchValue ?
+                                <p className="text-sm md:text-2xl font-semibold text-violet-800 text-center p-2">No todos title available with respect to your search</p>
                                 :
                                 userTodosea.map((user, id) => (
                                     <div key={id} className=" mb-3 flex justify-center items-center gap-4">
@@ -203,10 +207,10 @@ const Todos = () => {
                                             </div>
 
                                             <div  >
-                                                {messageShow && <h1 className="text-[20px]  border-[2px] border-indigo-400  flex   justify-between p-2 " >   {user.message}
-                                                    <div onClick={() => handledeleteMessage(user.message)} className="cursor-pointer text-red-400 " >
+                                                {messageShow && <h1 className="text-[20px]  border-[2px] border-indigo-400  flex   justify-between p-2 " > {user.message}
+                                                    {/* <div onClick={() => handledeleteMessage(user.message)} className="cursor-pointer text-red-400 " >
                                                         <i className="fa-solid fa-trash-can "  ></i>
-                                                    </div>
+                                                    </div> */}
                                                 </h1>
                                                 }
 

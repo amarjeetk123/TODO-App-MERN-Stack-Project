@@ -16,6 +16,24 @@
     width: 46%;
     height: 2px;
     background-color: rgb(105, 96, 96);
-    top: 13%;
+    top: 13%;   
+}
+.main-div{
+    background: url(https://www.signupliege.be/wp-content/uploads/2020/02/signup-background.jpg);
+    background-size: cover;
+    background-position: center;
+}
+.box{
+    background: linear-gradient(rgba(0,0,0,0.5)50%, rgba(0,0,0,0.5)50%);
     
 }
+
+.login-div{
+    background: url(https://live.staticflickr.com/4001/4269865482_2807867c48.jpg);
+    background-size: cover;
+    background-position: center;
+}
+.box2{
+    background: linear-gradient(rgba(0,0,0,0.6)50%, rgba(0,0,0,0.6)50%);
+}
+
