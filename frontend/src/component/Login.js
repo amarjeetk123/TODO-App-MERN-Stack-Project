@@ -23,15 +23,15 @@ function Login() {
     e.preventDefault()
     try {
 
-      await account.createEmailSession(user.email , user.password)
+     const res = await account.createEmailSession(user.email , user.password)
 
-      
+    
+
       navigate("/home")
       
     } catch (error) {
-      console.log(error)
-
-      if(user.email=="" && user.password==""){
+      console.log(error.message)
+      if(user.email==="" && user.password===""){
         return toast( "Please Write Email and Password" , {
           autoClose: 2200,
           type : "error",
@@ -39,8 +39,7 @@ function Login() {
     
         })
       }
-      
-      if(user.email==""){
+      if(user.email===""){
         return toast( "Please Fill the Email" , {
           autoClose: 2200,
           type : "error",
@@ -48,14 +47,48 @@ function Login() {
     
         })
       }
-      if(user.password==""){
+      if(user.password===""){
         return toast( "Please Write the password" , {
           autoClose: 2200,
           type : "error",
           position:"top-center",
     
         })
-      }
+      } if(user.email==="" && user.password===""){
+      return toast( "Please Write Email and Password" , {
+        autoClose: 2200,
+        type : "error",
+        position:"top-center",
+  
+      })
+    }
+    if(user.email===""){
+      return toast( "Please Fill the Email" , {
+        autoClose: 2800,
+        type : "error",
+        position:"top-center",
+  
+      })
+    }
+    if(user.password===""){
+      return toast( "Please Write the password" , {
+        autoClose: 2200,
+        type : "error",
+        position:"top-center",
+  
+      })
+    }
+    else{
+      return toast( error.message , {
+        autoClose: 2200,
+        type : "error",
+        position:"top-center",
+  
+      })
+    }
+     
+
+    
      
     }
     
@@ -74,7 +107,7 @@ function Login() {
             
             <div className='my-2'>
                 <h2>Email:</h2>
-                <input className='bg-gray-100 rounded-[5px] outline-none pl-2 border-2 border-indigo-200 text-[20px] focus:bg-white focus:border-indigo-500 ' type={"email"}
+                <input type="email" className='bg-gray-100 rounded-[5px] outline-none pl-2 border-2 border-indigo-200 text-[20px] focus:bg-white focus:border-indigo-500 ' 
                 onChange={(e) => {
                   setUser({
                     ...user,
