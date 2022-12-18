@@ -24,8 +24,8 @@ function Homepage() {
   return (
     <div>
         <Navbar name={userDetails?.name} />
-        <Form  userId={userDetails?.$id} />
-        <Todos />
+        <Form  userId={userDetails?.$id} userEmail={userDetails?.email} />
+        <Todos userId={userDetails?.$id}  />
     </div>
   )
 }

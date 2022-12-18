@@ -5,15 +5,19 @@ import axios from "axios"
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const Form = () => {
+const Form = ({userId , userEmail} ) => {
 
   const [userTitle,setTitle] = useState("")
   const [userMessage,setMessage] = useState("")
 
+  
   const submitData = async () =>{
     const userData = {
       title: userTitle,
       message: userMessage,
+      userId: userId,
+      userEmail: userEmail,
+
     }
     if(userData.title==""){
       return toast( "Please Write a Title for your Todo" , {
@@ -24,7 +28,7 @@ const Form = () => {
      
     }
     const result = await axios.post("/add" , userData)
-    // console.log(result)
+     console.log(result)
 
     setTimeout(() => {
       return toast("TODO Created Successfully" , {

@@ -8,8 +8,8 @@ exports.home = (req, res) => {
 exports.add_todo = async (req, res) => {
     try {
         // collect the details
-        const { title, message, userId } = req.body;
-
+        const { title, message, userId , userEmail } = req.body;
+        console.log(userEmail)
         // check title is present or not
         if (!title) {
             res.status(401).send("title is required");
@@ -20,8 +20,8 @@ exports.add_todo = async (req, res) => {
 
         // inserting user data inside database
         else {
-            const user_data = await User.create({ title, message , userId });
-
+            const user_data = await User.create({ title, message, userId , userEmail });
+            console.log(user_data)
             res.status(201).json({
                 succsess: true,
                 message: "TODO created succesfully",

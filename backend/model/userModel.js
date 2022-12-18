@@ -7,17 +7,20 @@ const userSchema = new mongoose.Schema({
         trim: true,
         maxlength: [15, "Titlt must be less than 15 character"]
     },
+    userId:{
+        type:String,
+        require: [true, "userId is required in order to create a todo"],
+    },
+    userEmail:{
+        type:String,
+        require: [true, "userEmail is required in order to create a todo"],
+    },
     message: [{
         type: String,
         createdAt: { type: Date, default: Date.now() },
         updateAt: { type: Date, default: Date.now() },
     }
-    ],
-    userid:{
-        type:String,
-        require: [true, "userId is required in order to create a todo"],
-
-    }
+    ]
 },
     { timestamps: true }
 )
