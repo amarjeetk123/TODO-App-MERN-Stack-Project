@@ -9,19 +9,19 @@ exports.add_todo = async (req, res) => {
     try {
         // collect the details
         const { title, message, userId , userEmail } = req.body;
-        console.log(userEmail)
+      
         // check title is present or not
         if (!title) {
             res.status(401).send("title is required");
         }
         if (!userId) {
-            return res.status(401).send("User Id is required to fetch the todos")
+            return res.status(401).send("User Id is required to add the todos")
         }
 
         // inserting user data inside database
         else {
             const user_data = await User.create({ title, message, userId , userEmail });
-            console.log(user_data)
+           
             res.status(201).json({
                 succsess: true,
                 message: "TODO created succesfully",
@@ -39,9 +39,18 @@ exports.add_todo = async (req, res) => {
 
 // get all the TODOs
 exports.getTodos = async (req, res) => {
+    const {  userId , userEmail } = req.body;
+    console.log(userEmail,userId)
+    if (!userId) {
+        return res.status(401).send("userId is required to fetch the todos")
+    }
+    if (!userEmail) {
+        return res.status(401).send("userEmail  is required to fetch the todos")
+    }
 
     try {
-        const users = await User.find()
+        const users = await User.findById({userId , userEmail})
+        console.log(users)
         res.status(200).json({
             success: true,
             users,
