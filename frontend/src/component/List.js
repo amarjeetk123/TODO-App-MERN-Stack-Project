@@ -13,6 +13,7 @@ const Todos = ({ userId, userEmail }) => {
     const [userTodosea, setUserTodosea] = useState([]);
 
     const [isSearch, setIsSearch] = useState(false);
+   
 
     /**
      * To store the search string.
@@ -24,13 +25,13 @@ const Todos = ({ userId, userEmail }) => {
     //  console.log(userEmail)
 
     const fetchUserData = async () => {
-        const userData = {
+
+        const  userData =  {
             userId: userId,
             userEmail: userEmail,
         };
 
-
-    console.log("daat22" , userData)
+        console.log("daat22", userData)
         try {
             const respo = await axios.get("/list", userData);
             // console.log(respo)
@@ -120,12 +121,18 @@ const Todos = ({ userId, userEmail }) => {
     };
 
     useEffect(() => {
+       
         fetchUserData();
 
         if (search == "") {
             setIsSearch(false);
         }
     }, [userTodo]);
+    
+    useEffect(() => {
+     console.log("id",userId)
+    }, [])
+    
 
     return (
         <div className="flex justify-center items-center mb-8">
@@ -161,8 +168,7 @@ const Todos = ({ userId, userEmail }) => {
                             userTodosea.map((user, id) => (
                                 <div
                                     key={id}
-                                    className=" mb-3 flex justify-center items-center gap-4"
-                                >
+                                    className=" mb-3 flex justify-center items-center gap-4"    >
                                     <div className="w-4 h-4 border border-blue-800 flex justify-center items-center p-4">
                                         <h1 className="text-[18px]"> {id + 1} </h1>
                                     </div>
@@ -171,23 +177,25 @@ const Todos = ({ userId, userEmail }) => {
                                         <div className="w-[100%] h-9 cursor-pointer hover:bg-indigo-300 p-2 bg-gray-100">
                                             <h1
                                                 className="text-[18px]"
-                                                onClick={() => SetMessageShow(!messageShow)}
+                                                onClick={() => {
+                                                    SetMessageShow(!messageShow)
+
+                                                }}
                                             >
                                                 {user.title}
                                             </h1>
                                         </div>
 
-                                        <div className=" ">
+                                        <div >
                                             {messageShow && (
                                                 <h1 className="text-[20px]  border-[2px] border-indigo-400  flex   justify-between p-2 ">
-                                                    {" "}
-                                                    {user.message}{" "}
-                                                    <div
+                                                    {user.message}
+                                                    {/* <div
                                                         onClick={() => handledeleteMessage(user.message)}
                                                         className="cursor-pointer text-red-400 "
                                                     >
                                                         <i className="fa-solid fa-trash-can "></i>
-                                                    </div>{" "}
+                                                    </div> */}
                                                 </h1>
                                             )}
                                         </div>
@@ -237,7 +245,7 @@ const Todos = ({ userId, userEmail }) => {
                                     <div>
                                         {messageShow && (
                                             <h1 className="text-[20px]  border-[2px] border-indigo-400  flex   justify-between p-2 ">
-                                                {" "}
+                                               
                                                 {user.message}
                                                 {/* <div onClick={() => handledeleteMessage(user.message)} className="cursor-pointer text-red-400 " >
                                                         <i className="fa-solid fa-trash-can "  ></i>
