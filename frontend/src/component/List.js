@@ -1,286 +1,313 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import "./style.css"
 
 // this is my react-toastify
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const Todos = ({ userId, userEmail }) => {
-    const [userTodo, setUserTodo] = useState([]); // null or empty string "" both are same , this is default value
-    const [messageShow, SetMessageShow] = useState(false);
 
-    const [userTodosea, setUserTodosea] = useState([]);
+  const [userTodo, setUserTodo] = useState([]); // null or empty string "" both are same , this is default value
+  const [messageShow, SetMessageShow] = useState(false);
 
-    const [isSearch, setIsSearch] = useState(false);
-   
+  const [userTodosea, setUserTodosea] = useState([]);
 
-    /**
-     * To store the search string.
-     */
+  const [isSearch, setIsSearch] = useState(false);
 
-    const [search, setSearch] = useState("");
-    // console.log(userEmail, userId)
+  const [todos, settodos] = useState("")   // this field is filled we i click on any title 
 
-    //  console.log(userEmail)
+  const [newTitle, setNewTitle] = useState("")
+  const [newMessage , setNewMessage] = useState("")
+  
 
-    const fetchUserData = async () => {
+  /**
+   * To store the search string.
+   */
 
-        const  userData =  {
-            userId: userId,
-            userEmail: userEmail,
-        };
+  const [search, setSearch] = useState("");
+  // console.log(userEmail, userId)
 
-        console.log("daat22", userData)
-        try {
-            const respo = await axios.get("/list", userData);
-            // console.log(respo)
-            // if no users is there plesae no set the value of setUserData
-            if (respo.data.users.length > 0) {
-                setUserTodo(respo.data.users);
-                // console.log(respo.data.users)
-            }
-        } catch (error) {
-            console.log(error);
-        }
+  const fetchUserData = async () => {
+    const userData = {
+      userId: userId,
+      userEmail: userEmail,
     };
-    // console.log(userTodo);
-    // here we can put all the code of fetchUserData function inside useEffect insted of  calling that funvtion but the problem is,  it is a bad practice to put asynch await inside useEffect
+    // console.log("daat22", userData);
+    try {
+      const respo = await axios.get("/list", userData);
 
-    const [noSearchValue, SetNoSearchValue] = useState(false);
-    const handleSearch = async (e) => {
-        try {
-            e.preventDefault();
+      // if no users is there plesae no set the value of setUserData
+      if (respo.data.users.length > 0) {
+        setUserTodo(respo.data.users);
+        // console.log(respo.data.users)
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  // console.log(userTodo);
+  // here we can put all the code of fetchUserData function inside useEffect insted of  calling that funvtion but the problem is,  it is a bad practice to put asynch await inside useEffect
 
-            setIsSearch(true);
+  const [noSearchValue, SetNoSearchValue] = useState(false);
+  const handleSearch = async (e) => {
+    try {
+      e.preventDefault();
 
-            if (!search) {
-                return;
-            }
+      setIsSearch(true);
 
-            let res = await axios.get("/search", { params: { search } });
+      if (!search) {
+        return;
+      }
 
-            SetNoSearchValue(false);
+      let res = await axios.get("/search", { params: { search } });
 
-            if (res.data.unfilteredTodos.length > 0) {
-                setUserTodosea(res.data.unfilteredTodos);
-            }
-        } catch (error) {
-            // console.log("Error while fetching search todos in search todos method")
-            // console.log("Error: ", error)
+      SetNoSearchValue(false);
 
-            if (error.response.data == "no value available") {
-                SetNoSearchValue(true);
-            }
-        }
-    };
+      if (res.data.unfilteredTodos.length > 0) {
+        setUserTodosea(res.data.unfilteredTodos);
+      }
+    } catch (error) {
+      // console.log("Error while fetching search todos in search todos method")
+      // console.log("Error: ", error)
 
-    const handleEdit = async (user) => {
-        const userchoice = window.confirm("Are You Sure to edit this title ?");
-        if (userchoice) {
-            const new_title = prompt("Please enter a new title for your todos");
-            if (new_title) {
-                const result = await axios.put(`/edit/${user._id}`, {
-                    title: new_title,
-                });
-                return toast("Todo Title Edited Successfully", {
-                    autoClose: 1300,
-                    type: "success",
-                });
-            } else if (!new_title) {
-                return toast("Todo Title is not Edited", {
-                    autoClose: 1300,
-                    type: "error",
-                });
-            }
-        }
-    };
+      if (error.response.data == "no value available") {
+        SetNoSearchValue(true);
+      }
+    }
+  };
 
-    const handledelete = async (user) => {
-        let userChoic = window.confirm("Are You Sure ?");
-        if (userChoic) {
-            const delete_ = await axios.delete(`/delete/${user._id}`);
-        }
-
-        return toast("Todo Deleted Successfully", {
-            autoClose: 1300,
-            type: "success",
+  const handleEdit = async (user) => {
+    const userchoice = window.confirm("Are You Sure to edit this title ?");
+    if (userchoice) {
+      const new_title = prompt("Please enter a new title for your todos");
+      if (new_title) {
+        const result = await axios.put(`/edit/${user._id}`, {
+          title: new_title,
         });
-    };
-    const handledeleteMessage = async (user) => {
-        let userChoic = window.confirm("Are You Sure ?");
-        if (userChoic) {
-            const delete_ = await axios.delete(`/delete/${user._id}`);
-        }
+        return toast("Todo Title Edited Successfully", {
+          autoClose: 1300,
+          type: "success",
+        });
+      } else if (!new_title) {
+        return toast("Todo Title is not Edited", {
+          autoClose: 1300,
+          type: "error",
+        });
+      }
+    }
+  };
 
-        // return toast("Todo Deleted Successfully", {
-        //     autoClose: 1300,
-        //     type: "success"
+  const handledelete = async (user) => {
+    let userChoic = window.confirm("Are You Sure ?");
+    if (userChoic) {
+      const delete_ = await axios.delete(`/delete/${user._id}`);
+    }
 
-        // })
-    };
+    return toast("Todo Deleted Successfully", {
+      autoClose: 1300,
+      type: "success",
+    });
+  };
+  const handledeleteMessage = async (user) => {
+    let userChoic = window.confirm("Are You Sure ?");
+    if (userChoic) {
+      const delete_ = await axios.delete(`/delete/${user._id}`);
+    }
 
-    useEffect(() => {
-       
-        fetchUserData();
+  };
 
-        if (search == "") {
-            setIsSearch(false);
-        }
-    }, [userTodo]);
-    
-    useEffect(() => {
-     console.log("id",userId)
-    }, [])
-    
+  const [editDetailsPermission, setEditDetailsPermission] = useState(false)
+ const [isChanging , setISChanging] = useState(false)
+  const saveChange = async (todos) => {
+  
+  if( (newTitle =="" && isChanging ) ){
+    setISChanging(false)
+    return alert("Title can not be blank..")
+   }
+   
+  if(isChanging && newTitle !== ""){
+    const result = await axios.put(`/edit/${todos._id}`, {
+      title: newTitle,
+    });
+    if(result){
+      todos.title = newTitle;
+      setISChanging(false)
+      setNewMessage("")
+   setNewTitle("")
+    }
+  }
+ 
+ 
 
-    return (
-        <div className="flex justify-center items-center mb-8">
-            <div className="w-[70%] ">
-                <div className=" text-center text-[30px] font-bold ">
-                    <h2 className="text-indigo-600">All ToDos!</h2>
-                </div>
-                <div className="flex justify-end mb-4 py-2">
-                    <input
-                        onChange={(e) => setSearch(e.target.value)}
-                        onKeyDown={(e) => {
-                            if (e.key === "Enter") handleSearch(e);
-                        }}
-                        placeholder="Search for a title....."
-                        className=" text-[20px]  border-[2px] border-indigo-400 rounded-[6px] w-[30%] h-[40px] pl-3 outline-none focus:border-[3px] focus:border-indigo-500 bg-gray-100 focus:bg-white "
-                        type={"text"}
-                    />
-                    <i
-                        className="fa-solid fa-magnifying-glass  fa-2x  absolute mr-2 mt-1 text-indigo-500 cursor-pointer  "
-                        onClick={(e) => {
-                            handleSearch(e);
-                        }}
-                    ></i>
-                </div>
+  }
 
-                <div className="bg-indigo-100  px-4 py-4 w-full ">
-                    {isSearch ? (
-                        noSearchValue ? (
-                            <p className="text-sm md:text-2xl font-semibold text-violet-800 text-center p-2">
-                                No todos title available with respect to your search
-                            </p>
-                        ) : (
-                            userTodosea.map((user, id) => (
-                                <div
-                                    key={id}
-                                    className=" mb-3 flex justify-center items-center gap-4"    >
-                                    <div className="w-4 h-4 border border-blue-800 flex justify-center items-center p-4">
-                                        <h1 className="text-[18px]"> {id + 1} </h1>
-                                    </div>
+  useEffect(() => {
+    fetchUserData();
 
-                                    <div className="w-[100%]">
-                                        <div className="w-[100%] h-9 cursor-pointer hover:bg-indigo-300 p-2 bg-gray-100">
-                                            <h1
-                                                className="text-[18px]"
-                                                onClick={() => {
-                                                    SetMessageShow(!messageShow)
+    if (search === "") {
+      setIsSearch(false);
+    }
+  }, [userTodo]);
 
-                                                }}
-                                            >
-                                                {user.title}
-                                            </h1>
-                                        </div>
-
-                                        <div >
-                                            {messageShow && (
-                                                <h1 className="text-[20px]  border-[2px] border-indigo-400  flex   justify-between p-2 ">
-                                                    {user.message}
-                                                    {/* <div
-                                                        onClick={() => handledeleteMessage(user.message)}
-                                                        className="cursor-pointer text-red-400 "
-                                                    >
-                                                        <i className="fa-solid fa-trash-can "></i>
-                                                    </div> */}
-                                                </h1>
-                                            )}
-                                        </div>
-                                    </div>
-
-                                    {/* code for edit button  */}
-                                    <div
-                                        onClick={() => handleEdit(user)}
-                                        className="cursor-pointer  text-indigo-500 opacity-0.7"
-                                    >
-                                        <i className="fa-regular fa-pen-to-square fa-2x"></i>
-                                    </div>
-                                    {/* code for delete button  */}
-                                    <div
-                                        onClick={() => handledelete(user)}
-                                        className="cursor-pointer text-red-400 "
-                                    >
-                                        <i className="fa-solid fa-trash-can fa-2x"></i>
-                                    </div>
-                                </div>
-                            ))
-                        )
-                    ) : userTodo.length === 0 ? (
-                        <p className="text-2xl font-semibold text-violet-800 text-center p-2">
-                            Your have no todos left...!
-                        </p>
-                    ) : (
-                        userTodo.map((user, id) => (
-                            <div
-                                key={id}
-                                className=" mb-3 flex justify-center items-center gap-4"
-                            >
-                                <div className="w-4 h-4 border border-blue-800 flex justify-center items-center p-4">
-                                    <h1 className="text-[18px]"> {id + 1} </h1>
-                                </div>
-
-                                <div className="w-[100%]">
-                                    <div className="w-[100%] h-9 cursor-pointer hover:bg-indigo-300 p-2 bg-gray-100">
-                                        <h1
-                                            className="text-[18px]"
-                                            onClick={() => SetMessageShow(!messageShow)}
-                                        >
-                                            {user.title}
-                                        </h1>
-                                    </div>
-
-                                    <div>
-                                        {messageShow && (
-                                            <h1 className="text-[20px]  border-[2px] border-indigo-400  flex   justify-between p-2 ">
-                                               
-                                                {user.message}
-                                                {/* <div onClick={() => handledeleteMessage(user.message)} className="cursor-pointer text-red-400 " >
-                                                        <i className="fa-solid fa-trash-can "  ></i>
-                                                    </div> */}
-                                            </h1>
-                                        )}
-                                    </div>
-                                </div>
-
-                                {/* code for edit button  */}
-                                <div
-                                    onClick={() => handleEdit(user)}
-                                    className="cursor-pointer  text-indigo-500 opacity-0.7"
-                                >
-                                    <i className="fa-regular fa-pen-to-square fa-2x"></i>
-                                </div>
-                                {/* code for delete button  */}
-                                <div
-                                    onClick={() => handledelete(user)}
-                                    className="cursor-pointer text-red-400 "
-                                >
-                                    <i className="fa-solid fa-trash-can fa-2x"></i>
-                                </div>
-                            </div>
-                        ))
-                    )}
-                </div>
-            </div>
-            <ToastContainer
-                position="top-center"
-                closeOnClick="true"
-                pauseOnHover="true"
-            />
+  return (
+    <>
+    <div className="flex justify-center items-center mb-8">
+      <div className="w-[70%] ">
+        <div className=" text-center text-[30px] font-bold ">
+          <h2 className="text-indigo-600">All ToDos!</h2>
         </div>
-    );
+        <div className="flex justify-end mb-4 py-2">
+          <input
+            onChange={(e) => setSearch(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") handleSearch(e);
+            }}
+            placeholder="Search for a title....."
+            className=" text-[20px]  border-[2px] border-indigo-400 rounded-[6px] w-[30%] h-[40px] pl-3 outline-none focus:border-[3px] focus:border-indigo-500 bg-gray-100 focus:bg-white "
+            type={"text"}
+          />
+          <i
+            className="fa-solid fa-magnifying-glass  fa-2x  absolute mr-2 mt-1 text-indigo-500 cursor-pointer  "
+            onClick={(e) => {
+              handleSearch(e);
+            }}
+          ></i>
+        </div>
+
+        <div className="bg-indigo-100  px-4 py-4 w-full ">
+          {isSearch ? (
+            noSearchValue ? (
+              <p className="text-sm md:text-2xl font-semibold text-violet-800 text-center p-2">
+                No todos title available with respect to your search
+              </p>
+            ) : (
+              userTodosea.map((user, id) => (
+                <div
+                  key={id}
+                  className=" mb-3 flex justify-center items-center gap-4"
+                >
+                  <div className="w-4 h-4 border border-blue-800 flex justify-center items-center p-4">
+                    <h1 className="text-[18px]"> {id + 1} </h1>
+                  </div>
+
+                  <div className="w-[100%]">
+                    <div className="w-[100%] h-9 cursor-pointer hover:bg-indigo-300 p-2 bg-gray-100">
+                      <h1
+                        className="text-[18px]"
+                        onClick={() => {
+                          SetMessageShow(!messageShow)
+                          settodos(user)
+                        }}
+                      >
+                        {user.title}
+                      </h1>
+                    </div>
+                  </div>
+
+                  {/* code for edit button  */}
+                  <div
+                    onClick={() => handleEdit(user)}
+                    className="cursor-pointer  text-indigo-500 opacity-0.7"
+                  >
+                    <i className="fa-regular fa-pen-to-square fa-2x"></i>
+                  </div>
+                  {/* code for delete button  */}
+                  <div
+                    onClick={() => handledelete(user)}
+                    className="cursor-pointer text-red-400 "
+                  >
+                    <i className="fa-solid fa-trash-can fa-2x"></i>
+                  </div>
+                </div>
+              ))
+            )
+          ) : userTodo.length === 0 ? (
+            <p className="text-2xl font-semibold text-violet-800 text-center p-2">
+              Your have no todos left...!
+            </p>
+          ) : (
+            userTodo.map((user, id) => (
+              <div
+                key={id}
+                className=" mb-3 flex justify-center items-center gap-4"
+              >
+                <div className="w-4 h-4 border border-blue-800 flex justify-center items-center p-4">
+                  <h1 className="text-[18px]"> {id + 1} </h1>
+                </div>
+
+                <div className="w-[100%]">
+                  <div className="w-[100%] h-9 cursor-pointer hover:bg-indigo-300 p-2 bg-gray-100">
+                    <h1
+                      className="text-[18px]"
+                      onClick={() => 
+                      {  SetMessageShow(!messageShow)
+                        settodos(user)
+                      }
+                    }
+                    >
+                      {user.title}
+                    </h1>
+                  </div>
+                </div>
+
+                {/* code for edit button  */}
+                <div
+                  onClick={() => handleEdit(user)}
+                  className="cursor-pointer  text-indigo-500 opacity-0.7"
+                >
+                  <i className="fa-regular fa-pen-to-square fa-2x"></i>
+                </div>
+                {/* code for delete button  */}
+                <div
+                  onClick={() => handledelete(user)}
+                  className="cursor-pointer text-red-400 "
+                >
+                  <i className="fa-solid fa-trash-can fa-2x"></i>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      </div>
+  
+    </div>
+    {messageShow && (
+           <div className=" w-[100vw] h-full absolute top-0 flex justify-center items-center bg1" >
+              <div className="min-w-[70%]  min-h-[200px]   px-4 bg-white  ">
+               <i className="fa-solid fa-xmark text-[25px] cursor-pointer float-right mt-2  " onClick={() => {
+                SetMessageShow(false)
+                settodos("")
+                setEditDetailsPermission(false)
+               } } ></i>
+
+               {editDetailsPermission ? <button onClick={() =>
+                { setEditDetailsPermission (!editDetailsPermission)
+                  saveChange(todos) 
+                 } }  className="mt-4 text-[20px] py-1 float-right mr-4 mt-2 px-4 rounded-[7px] bg-indigo-500 text-white  " >Save Details</button>  : <button onClick={() => setEditDetailsPermission(!editDetailsPermission) }  className="mt-4 text-[20px] py-1 float-right mr-4 mt-2 px-4 rounded-[7px] bg-indigo-500 text-white  " >Edit Details</button> }
+
+              <h1 className="mt-4 text-[26px] " >Title:- { editDetailsPermission ? <input defaultValue={todos.title} className="text-[22px] border-[2px] border-gray-600 px-1 " onChange={(e) => {
+                setNewTitle(e.target.value)
+                setISChanging(true)
+              } } /> :  <span className="font-serif" >{todos.title}</span> }  </h1> 
+
+              
+              <h1 className="mt-4 text-[26px] flex items-start flex-row" >  <span>Tasks:- </span>  { editDetailsPermission ? <textarea defaultValue={todos.message} className="text-[22px] border-[2px] border-gray-600 px-1 min-w-[80%] min-h-[40px] " onChange={(e) => setNewMessage(e.target.value) } /> :  <span className="font-serif" >{todos.message}</span> }  </h1>
+                
+
+              {/* <h1 className=" text-[26px] " >   <span className="font-mono">{openMessage}</span> </h1> */}
+           </div>
+           
+        </div>
+        )}
+    <ToastContainer
+        position="top-center"
+        closeOnClick="true"
+        pauseOnHover="true"
+      />
+    </>
+  );
 };
 
 export default Todos;

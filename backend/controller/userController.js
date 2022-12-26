@@ -39,18 +39,19 @@ exports.add_todo = async (req, res) => {
 
 // get all the TODOs
 exports.getTodos = async (req, res) => {
-    const {  userId , userEmail } = req.body;
-    console.log(userEmail,userId)
-    if (!userId) {
-        return res.status(401).send("userId is required to fetch the todos")
-    }
-    if (!userEmail) {
-        return res.status(401).send("userEmail  is required to fetch the todos")
-    }
+    // const {  userId , userEmail } = req.body;
+    // console.log(userEmail,userId)
+    // if (!userId) {
+    //     return res.status(401).send("userId is required to fetch the todos")
+    // }
+    // if (!userEmail) {
+    //     return res.status(401).send("userEmail  is required to fetch the todos")
+    // }
 
     try {
-        const users = await User.findById({userId , userEmail})
-        console.log(users)
+        // const users = await User.findById({userId , userEmail})
+        const users = await User.find()
+        // console.log(users)
         res.status(200).json({
             success: true,
             users,

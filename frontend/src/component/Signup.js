@@ -29,7 +29,7 @@ function Signup() {
     const signupUser = async (e) => {
         e.preventDefault();
 
-        if(user.firstname==="" && user.lastname==="" && user.email== "" & user.password==""){
+        if(user.firstname==="" && user.lastname==="" && user.email=== "" & user.password===""){
             return toast( "Please Give All The Details" , {
                 autoClose: 2200,
                 type : "error",
