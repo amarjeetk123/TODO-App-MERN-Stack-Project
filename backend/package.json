@@ -4,7 +4,7 @@
   "description": "",
   "main": "App.js",
   "scripts": {
-    "build": "echo succsess",
+
     "start": "node server.js",
     "dev": "nodemon server.js"
   },
