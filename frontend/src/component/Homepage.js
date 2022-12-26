@@ -15,7 +15,7 @@ function Homepage() {
    getUserData.then(
     function(response){
       setuserDetails(response);
-      console.log(response)
+      // console.log(response)
     },
     function(error){
       console.log(error);
@@ -23,7 +23,7 @@ function Homepage() {
    )
   }, [])
 
-   console.log(userDetails)
+  //  console.log(userDetails)
   return (
     <div>
         <Navbar name={userDetails?.name} />
