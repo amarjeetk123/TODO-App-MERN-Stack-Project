@@ -4,13 +4,14 @@ import axios from "axios"
 // this is my react-toastify
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { BASE_URL } from "../App";
+
 
 const Form = ({userId , userEmail} ) => {
-
+  
   const [userTitle,setTitle] = useState("")
   const [userMessage,setMessage] = useState("")
 
-  
   const submitData = async () =>{
     const userData = {
       title: userTitle,
@@ -26,7 +27,7 @@ const Form = ({userId , userEmail} ) => {
       })
      
     }
-    const result = await axios.post("/add" , userData)
+    const result = await axios.post(`${BASE_URL}/app` , userData)
     //  console.log(result)
 
     setTimeout(() => {

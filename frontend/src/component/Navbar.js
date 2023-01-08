@@ -44,8 +44,6 @@ function Navbar({name}) {
 
        <button onClick={logout} className='absolute hover:bg-indigo-500  top-20 bg-indigo-400 py-1 px-5 rounded-[5px] ' >Log Out</button>
 
-
-
     </div>
   )
 }

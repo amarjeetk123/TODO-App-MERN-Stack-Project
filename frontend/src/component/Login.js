@@ -3,6 +3,7 @@ import {account} from "../appwrite/appwriteConfig"
 import {useNavigate} from "react-router-dom"
 import Sociallogin from './Sociallogin';
 import { Link } from 'react-router-dom';
+import { BASE_URL } from "../App";
 
 // this is my react-toastify
 import { ToastContainer, toast } from "react-toastify";

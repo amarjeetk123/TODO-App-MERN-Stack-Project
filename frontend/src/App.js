@@ -10,7 +10,10 @@ import Login from './component/Login';
 import Signup from './component/Signup';
 import { useEffect, useState } from 'react';
 
+export const BASE_URL = "http://localhost:4000";
+
 function App() {
+  
 
   const [userDetails, setuserDetails] = useState()
     useEffect(() => {
