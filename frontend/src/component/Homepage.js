@@ -1,14 +1,12 @@
 import Navbar from "./Navbar";
 import Form from "./Form";
 import Todos from "./List"
-
 import {account} from "../appwrite/appwriteConfig"
 import { useEffect, useState } from "react";
 
 function Homepage() {
   
   const [userDetails, setuserDetails] = useState()
-
 
   useEffect(() => {
    const getUserData = account.get();

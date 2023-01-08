@@ -1,11 +1,7 @@
-
 import './App.css';
-
 import Homepage from './component/Homepage';
 import {BrowserRouter , Route , Routes} from "react-router-dom"
-
 import {account} from "./appwrite/appwriteConfig"
-
 import Login from './component/Login';
 import Signup from './component/Signup';
 import { useEffect, useState } from 'react';
@@ -14,7 +10,6 @@ export const BASE_URL = "http://localhost:4000";
 
 function App() {
   
-
   const [userDetails, setuserDetails] = useState()
     useEffect(() => {
       const getUserData = account.get();
@@ -28,15 +23,13 @@ function App() {
       )
      }, [])
 
-
   return (
-    
     <BrowserRouter>
     <Routes>
       <Route path='/' element = { <Signup /> } />
       <Route path='/login' element = { <Login /> } />
-      <Route path='/home' element = { userDetails ? <Homepage /> : <Login /> } />
-      
+      {/* <Route path='/home' element = { userDetails ? <Homepage /> : <Login /> } /> */}
+      <Route path='/home' element = {  <Homepage />  } />
     </Routes>
     </BrowserRouter>
   );

@@ -3,18 +3,12 @@ import { account } from "../appwrite/appwriteConfig"
 import { useNavigate } from "react-router-dom"
 import { v4 as uuidv4 } from "uuid"
 import { Link } from 'react-router-dom'
-import { BASE_URL } from "../App";
-
 import "./style.css"
-
 import Sociallogin from './Sociallogin'
-
 import "./style.css"
-
 // this is my react-toastify
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
 
 function Signup() {
 
@@ -60,7 +54,6 @@ function Signup() {
             user.name,
         )
      
-
         promise.then(
             function (responce) {
                 console.log(responce);
@@ -74,7 +67,6 @@ function Signup() {
                         type : "error",
                         position:"top-center",
                       })
-
                 }
                 else{
                     return toast( error.message , {
@@ -84,18 +76,9 @@ function Signup() {
               
                   })
                 }
-                
             }
         )
-
-
-
     }
-    //  useEffect(() => {
-    //   user.name=""
-    //   user.email=""
-    //  }, [])
-
 
 
     return (

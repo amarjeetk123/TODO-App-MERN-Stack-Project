@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import {account} from "../appwrite/appwriteConfig"
 import {useNavigate } from "react-router-dom"
-import { BASE_URL } from "../App";
 
 function Navbar({name}) {
   const navigate =  useNavigate();

@@ -2,14 +2,13 @@ import React from "react";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import "./style.css";
-
 // this is my react-toastify
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { BASE_URL } from "../App";
 
 const Todos = ({ userId, userEmail }) => {
-  
+
   const [userTodo, setUserTodo] = useState([]); // null or empty string "" both are same , this is default value
   const [messageShow, SetMessageShow] = useState(false);
 
@@ -36,7 +35,7 @@ const Todos = ({ userId, userEmail }) => {
     };
     // console.log("daat22", userData);
     try {
-      const respo = await axios.get("/list", userData);
+      const respo = await axios.get(`${BASE_URL}/list`, userData);
 
       // if no users is there plesae no set the value of setUserData
       if (respo.data.users.length > 0) {
@@ -54,7 +53,6 @@ const Todos = ({ userId, userEmail }) => {
   const handleSearch = async (e) => {
     try {
       e.preventDefault();
-
       setIsSearch(true);
 
       if (!search) {
@@ -71,7 +69,6 @@ const Todos = ({ userId, userEmail }) => {
     } catch (error) {
       // console.log("Error while fetching search todos in search todos method")
       // console.log("Error: ", error)
-
       if (error.response.data == "no value available") {
         SetNoSearchValue(true);
       }
@@ -338,7 +335,7 @@ const Todos = ({ userId, userEmail }) => {
             )}
 
             <h1 className="mt-4 text-[26px]  ">
-             <span className="text-indigo-700" > Title:-</span>
+              <span className="text-indigo-700" > Title:-</span>
               {editDetailsPermission ? (
                 <input
                   defaultValue={todos.title}
@@ -354,7 +351,7 @@ const Todos = ({ userId, userEmail }) => {
             </h1>
 
             <h1 className="mt-4 text-[26px] flex items-start flex-row">
-           
+
               <span className="text-indigo-700" >Tasks:- </span>
               {editDetailsPermission ? (
                 <textarea
