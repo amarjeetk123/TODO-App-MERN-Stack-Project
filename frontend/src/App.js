@@ -6,8 +6,8 @@ import Login from './component/Login';
 import Signup from './component/Signup';
 import { useEffect, useState } from 'react';
 
-// export const BASE_URL = "http://localhost:4000";
-export const BASE_URL = "https://todo-backend-2ony.onrender.com";
+export const BASE_URL = "http://localhost:4000";
+// export const BASE_URL = "https://todo-backend-2ony.onrender.com";
 
 function App() {
 
@@ -27,10 +27,10 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/' element={<Homepage />} />
-        {/* <Route path='/login' element={<Login />} /> */}
+        <Route path='/' element={<Signup />} />
+        <Route path='/login' element={<Login />} />
         {/* <Route path='/home' element = { userDetails ? <Homepage /> : <Login /> } /> */}
-        {/* <Route path='/register' element={<Signup />} /> */}
+        <Route path='/home' element={<Homepage />} />
       </Routes>
     </BrowserRouter>
   );

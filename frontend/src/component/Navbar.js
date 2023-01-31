@@ -32,7 +32,7 @@ function Navbar({name}) {
   return (
     <div className='bg-indigo-300 px-8 py-2  fixed top-0 w-full flex justify-between items-center '>
        <div className='flex items-center gap-2' >
-       <h1 className='text-[30px] font-semibold font-sans flex gap-2' >Hello <span style={{fontFamily:"cursive" , textTransform:"capitalize" }} >  {userDetails.email }  </span>  </h1>
+       <h1 className='text-[30px] font-semibold font-sans flex gap-2' >Hello <span style={{fontFamily:"cursive" , textTransform:"capitalize" }} >  {userDetails.name }  </span>  </h1>
        
        </div>
        <div className='flex gap-8 text-[22px] font-semibold'>
